@@ -5,7 +5,6 @@ Node *makeTree(Node *root,int x){
         root->left=makeTree(root->left,x);
     else
         root->right=makeTree(root->right,x);
-    return root;
 }
 
 Node* post_order(int pre[], int size)
