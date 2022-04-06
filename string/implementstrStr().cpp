@@ -1,50 +1,34 @@
 class Solution {
-    public int strStr(String haystack, String needle) {
-        int n1=haystack.length();
-        int n2=needle.length();
-        if(n2==0)
-            return 0;
-        if(n1==0||n2>n1)
-            return -1;
-        int lps[]=new int[n2];
-      
-        int j=0;
-        int i=1;
-        while(i<n2){ 
-            if(needle.charAt(i)==needle.charAt(j)){
-                lps[i]=j+1;
-                i++;
-                j++;
-            }
-            else{
-                if(j!=0){
-                    j=lps[j-1];
-                }
-                else{
-                    lps[i]=0;
-                    i++;
-                }
-            }
+public:
+    //O(n+m) : KMP algorithm :)
+    vector<int> func(string s){
+        int n=s.size();
+        int len=0;
+        vector<int>lps(n,0);
+        
+        for(int i=1;i<n;){
+            if(s[len]==s[i]) lps[i++]=++len;
+            else if(len) len=lps[len-1];
+            else  lps[i++]=0;
         }
-        i=0;
-        j=0;
-        while(i<n1&&j<n2){
-            if(haystack.charAt(i)==needle.charAt(j)){
-                i++;
-                j++;
-            }
-            else{
-                if(j!=0){
-                    j=lps[j-1];
-                }
-                else{
-                    i++;
-                }
-            }
+        return lps;
+    }
+    
+    int strStr(string haystack, string needle) {
+        vector<int>A=func(needle);
+        
+        int i=0,j=0;
+        int n=haystack.size();
+        int m=needle.size();
+        
+        int ans=0;
+        while(i<n and j<m){
+            if(haystack[i]==needle[j]) i++,j++;
+            else if(j==0) i+=1;
+            else j=A[j-1];
         }
-        if(j==n2){
-            return i-n2;
-        }
+        if(j==m)
+            return i-needle.size();
         return -1;
     }
-}
+};
